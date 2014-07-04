@@ -10,8 +10,17 @@ SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules/" ${CMAKE_MODULE_PATH})
 
 FIND_PACKAGE(Lua53 REQUIRED)
 
-OPTION(WANTS_BUILD_MODULE_LIBRARY "Set to ON to build loadable module." ON)
-OPTION(WANTS_BUILD_STATIC_LIBRARY "Set to ON to build static library." ON)
+IF(APPLE)
+	INCLUDE(XcodeDefaults)
+ENDIF()
+
+IF(APPLE AND IOS)
+	OPTION(WANTS_BUILD_MODULE_LIBRARY "Set to ON to build loadable module." OFF)
+	OPTION(WANTS_BUILD_STATIC_LIBRARY "Set to ON to build static library." ON)
+ELSE()
+	OPTION(WANTS_BUILD_MODULE_LIBRARY "Set to ON to build loadable module." ON)
+	OPTION(WANTS_BUILD_STATIC_LIBRARY "Set to ON to build static library." OFF)
+ENDIF()
 
 IF(NOT WANTS_BUILD_STATIC_LIBRARY AND NOT WANTS_BUILD_MODULE_LIBRARY)
 	MESSAGE(SEND_ERROR "Either WANTS_BUILD_STATIC_LIBRARY or WANTS_BUILD_MODULE_LIBRARY needs to be selected, but both are OFF. So there is nothing to build.")

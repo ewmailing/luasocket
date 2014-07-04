@@ -1,0 +1,27 @@
+cmake  -DCMAKE_TOOLCHAIN_FILE=../../CMakeModules/iOS.toolchain.cmake -DCMAKE_PREFIX_PATH=~/Source/Blurrr/Release/Blurrr_Apple_DP1/Libraries/iOS/SDK/Lua_f32_i32 -GXcode ../..
+
+
+Linux:
+
+ccmake -DCMAKE_PREFIX_PATH=~/Source/Blurrr/BlurrrSDKLinuxBinaries/Libraries/Linux/SDK/Lua_f64_i64 ..
+
+
+Manual Stuff:
+Build -Os
+Build .dSYM
+Deployment target 10.6, 5.1
+
+ccmake -DCMAKE_FRAMEWORK_PATH=~/Source/Blurrr/Release/Blurrr_Apple_DP1/Libraries/OSX/SDK/Lua_f64_i64/Frameworks -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_OSX_DEPLOYMENT_TARGET=10.6 -GXcode ..
+ ccmake -DCMAKE_FRAMEWORK_PATH=~/Source/Blurrr/Release/Blurrr_Apple_DP1/Libraries/OSX/SDK/Lua_f64_i64/Frameworks -DCMAKE_BUILD_TYPE=MinSizeRel   -GXcode ..
+
+For iOS
+mkdir BUILDIOS
+cd BUILDIOS
+ccmake -DCMAKE_TOOLCHAIN_FILE=../CMakeModules/iOS.toolchain.cmake -C ../CMakeModules/InitialCache_Lua_f32i32_iOS.cmake -DBLURRR_SDK_PATH=~/Source/Blurrr/Distribution/BINARIES/iOS/SDK/Lua_f32_i32 -GXcode ..
+
+remember to set the deployment target, -Os
+debug symbols?
+
+
+lipo -create -output libALmixerLuaBindings.a path/to/sim/libALmixerLuaBindings.a path/to/device/libALmixerLuaBindings.a
+

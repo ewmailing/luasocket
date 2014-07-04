@@ -2,7 +2,7 @@
 # Furthermore, CMake doesn't offer good support for renaming TARGETS on install.
 # The easiest way to work around this problem was create a new subdirectory just for the mime plugin and build directly to the name 'core'.
 
-SET(luasocket_UNIX
+SET(luasocket_common
 		${LuaSocket_SOURCE_DIR}/src/buffer.h
 		${LuaSocket_SOURCE_DIR}/src/buffer.c
 		${LuaSocket_SOURCE_DIR}/src/auxiliar.h
@@ -15,6 +15,9 @@ SET(luasocket_UNIX
 		${LuaSocket_SOURCE_DIR}/src/io.c
 		${LuaSocket_SOURCE_DIR}/src/usocket.h
 		${LuaSocket_SOURCE_DIR}/src/usocket.c
+)
+
+SET(luasocket_UNIX
 		${LuaSocket_SOURCE_DIR}/src/unix.c
 )
 SET(luasocket_UNIX_PUBLIC_HEADERS
@@ -22,21 +25,32 @@ SET(luasocket_UNIX_PUBLIC_HEADERS
 )
 
 IF(WANTS_BUILD_MODULE_LIBRARY)
-	ADD_LIBRARY(luasocket_unix_library_module MODULE ${luasocket_UNIX_PUBLIC_HEADERS} ${luasocket_UNIX})
+	ADD_LIBRARY(luasocket_unix_library_module MODULE ${luasocket_UNIX_PUBLIC_HEADERS} "${luasocket_common};${luasocket_UNIX}")
 	SET_TARGET_PROPERTIES(luasocket_unix_library_module PROPERTIES 
 		PREFIX ""
 		OUTPUT_NAME "core"
 	)
 	TARGET_LINK_LIBRARIES(luasocket_unix_library_module ${LUA_LIBRARIES} ${LUASOCKET_LINK_FLAGS})
 	SET_TARGET_PROPERTIES(luasocket_unix_library_module PROPERTIES COMPILE_FLAGS "${LUASOCKET_C_FLAGS}")
+
+	IF(APPLE)
+		BLURRR_CONFIGURE_XCODE_DEFAULTS(luasocket_unix_library_module)
+	ENDIF(APPLE)
+
 ENDIF(WANTS_BUILD_MODULE_LIBRARY)
 
 
 IF(WANTS_BUILD_STATIC_LIBRARY)
+	# Don't add the common because we'll get duplicate symbol errors when linking with regular luasocket
 	ADD_LIBRARY(luasocket_unix_library_static STATIC ${luasocket_UNIX_PUBLIC_HEADERS} ${luasocket_UNIX})
 	SET_TARGET_PROPERTIES(luasocket_unix_library_static PROPERTIES OUTPUT_NAME "luasocketunix")
 	TARGET_LINK_LIBRARIES(luasocket_unix_library_static ${LUA_LIBRARIES} ${LUASOCKET_LINK_FLAGS})
 	SET_TARGET_PROPERTIES(luasocket_unix_library_static PROPERTIES COMPILE_FLAGS "${LUASOCKET_C_FLAGS}")
+
+	IF(APPLE)
+		BLURRR_CONFIGURE_XCODE_DEFAULTS(luasocket_unix_library_static)
+	ENDIF(APPLE)
+
 ENDIF(WANTS_BUILD_STATIC_LIBRARY)
 
 IF(WANTS_BUILD_STATIC_LIBRARY)
