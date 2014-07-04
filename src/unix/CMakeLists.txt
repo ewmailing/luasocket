@@ -25,7 +25,7 @@ SET(luasocket_UNIX_PUBLIC_HEADERS
 )
 
 IF(WANTS_BUILD_MODULE_LIBRARY)
-	ADD_LIBRARY(luasocket_unix_library_module MODULE ${luasocket_UNIX_PUBLIC_HEADERS} "${luasocket_common};${luasocket_UNIX}")
+	ADD_LIBRARY(luasocket_unix_library_module MODULE ${luasocket_UNIX_PUBLIC_HEADERS} ${luasocket_common} ${luasocket_UNIX})
 	SET_TARGET_PROPERTIES(luasocket_unix_library_module PROPERTIES 
 		PREFIX ""
 		OUTPUT_NAME "core"
