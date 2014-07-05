@@ -18,10 +18,19 @@ SET(luamime_RESOURCE_FILES
 
 IF(WANTS_BUILD_MODULE_LIBRARY)
 	ADD_LIBRARY(luamime_library_module MODULE ${luasocket_MIME_PUBLIC_HEADERS} ${luasocket_MIME})
-	SET_TARGET_PROPERTIES(luamime_library_module PROPERTIES
-		PREFIX ""
-		OUTPUT_NAME "core"
-	)
+
+	IF(ANDROID)
+		SET_TARGET_PROPERTIES(luamime_library_module PROPERTIES 
+			PREFIX "lib"
+			OUTPUT_NAME "mime.core"
+		)
+	ELSE()
+		SET_TARGET_PROPERTIES(luamime_library_module PROPERTIES 
+			PREFIX ""
+			OUTPUT_NAME "core"
+		)
+	ENDIF()
+
 	SET_TARGET_PROPERTIES(luamime_library_module PROPERTIES COMPILE_FLAGS "${LUASOCKET_C_FLAGS}")
 	TARGET_LINK_LIBRARIES(luamime_library_module ${LUA_LIBRARY} ${LUASOCKET_LINK_FLAGS})
 

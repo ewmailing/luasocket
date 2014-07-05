@@ -55,12 +55,22 @@ SET(luasocketcommon_RESOURCE_FILES
 		${LuaSocket_SOURCE_DIR}/src/mime.lua
 )
 
+
 IF(WANTS_BUILD_MODULE_LIBRARY)
 	ADD_LIBRARY(luasocket_library_module MODULE ${luasocket_PUBLIC_HEADERS} ${luasocket_SOCKET})
-	SET_TARGET_PROPERTIES(luasocket_library_module PROPERTIES 
-		PREFIX ""
-		OUTPUT_NAME "core"
-	)
+
+	IF(ANDROID)
+		SET_TARGET_PROPERTIES(luasocket_library_module PROPERTIES 
+			PREFIX "lib"
+			OUTPUT_NAME "socket.core"
+		)
+	ELSE()
+		SET_TARGET_PROPERTIES(luasocket_library_module PROPERTIES 
+			PREFIX ""
+			OUTPUT_NAME "core"
+		)
+	ENDIF()
+
 	TARGET_LINK_LIBRARIES(luasocket_library_module ${LUA_LIBRARY} ${LUASOCKET_LINK_FLAGS})
 	SET_TARGET_PROPERTIES(luasocket_library_module PROPERTIES COMPILE_FLAGS "${LUASOCKET_C_FLAGS}")
 

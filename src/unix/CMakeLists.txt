@@ -26,11 +26,20 @@ SET(luasocket_UNIX_PUBLIC_HEADERS
 
 IF(WANTS_BUILD_MODULE_LIBRARY)
 	ADD_LIBRARY(luasocket_unix_library_module MODULE ${luasocket_UNIX_PUBLIC_HEADERS} ${luasocket_common} ${luasocket_UNIX})
-	SET_TARGET_PROPERTIES(luasocket_unix_library_module PROPERTIES 
-		PREFIX ""
-		OUTPUT_NAME "core"
-	)
-	TARGET_LINK_LIBRARIES(luasocket_unix_library_module ${LUA_LIBRARIES} ${LUASOCKET_LINK_FLAGS})
+
+	IF(ANDROID)
+		SET_TARGET_PROPERTIES(luasocket_unix_library_module PROPERTIES 
+			PREFIX "lib"
+			OUTPUT_NAME "unix.core"
+		)
+	ELSE()
+		SET_TARGET_PROPERTIES(luasocket_unix_library_module PROPERTIES 
+			PREFIX ""
+			OUTPUT_NAME "core"
+		)
+	ENDIF()
+
+	TARGET_LINK_LIBRARIES(luasocket_unix_library_module ${LUA_LIBRARY} ${LUASOCKET_LINK_FLAGS})
 	SET_TARGET_PROPERTIES(luasocket_unix_library_module PROPERTIES COMPILE_FLAGS "${LUASOCKET_C_FLAGS}")
 
 	IF(APPLE)
@@ -44,7 +53,7 @@ IF(WANTS_BUILD_STATIC_LIBRARY)
 	# Don't add the common because we'll get duplicate symbol errors when linking with regular luasocket
 	ADD_LIBRARY(luasocket_unix_library_static STATIC ${luasocket_UNIX_PUBLIC_HEADERS} ${luasocket_UNIX})
 	SET_TARGET_PROPERTIES(luasocket_unix_library_static PROPERTIES OUTPUT_NAME "luasocketunix")
-	TARGET_LINK_LIBRARIES(luasocket_unix_library_static ${LUA_LIBRARIES} ${LUASOCKET_LINK_FLAGS})
+	TARGET_LINK_LIBRARIES(luasocket_unix_library_static ${LUA_LIBRARY} ${LUASOCKET_LINK_FLAGS})
 	SET_TARGET_PROPERTIES(luasocket_unix_library_static PROPERTIES COMPILE_FLAGS "${LUASOCKET_C_FLAGS}")
 
 	IF(APPLE)

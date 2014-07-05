@@ -28,8 +28,8 @@ LOCAL_PATH := $(call my-dir)
 # For the dynamic library
 include $(CLEAR_VARS)
 # This is the name of module the caller will use in LOCAL_SHARED_LIBRARIES
-LOCAL_MODULE := lpeg_shared
-LOCAL_SRC_FILES := libs/$(TARGET_ARCH_ABI)/lpeg.so
+LOCAL_MODULE := luasocket_shared
+LOCAL_SRC_FILES := libs/$(TARGET_ARCH_ABI)/socket/libcore.so
 #LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
 # Use LOCAL_EXPORT_CFLAGS to automatically export the correct flags (as necessary) to the calling module so the caller doesn't need to know the details.
 # LOCAL_EXPORT_CFLAGS := 
