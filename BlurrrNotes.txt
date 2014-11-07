@@ -15,13 +15,43 @@ ccmake -DCMAKE_FRAMEWORK_PATH=~/Source/Blurrr/Release/Blurrr_Apple_DP1/Libraries
  ccmake -DCMAKE_FRAMEWORK_PATH=~/Source/Blurrr/Release/Blurrr_Apple_DP1/Libraries/OSX/SDK/Lua_f64_i64/Frameworks -DCMAKE_BUILD_TYPE=MinSizeRel   -GXcode ..
 
 For iOS
-mkdir BUILDIOS
-cd BUILDIOS
-ccmake -DCMAKE_TOOLCHAIN_FILE=../CMakeModules/iOS.toolchain.cmake -C ../CMakeModules/InitialCache_Lua_f32i32_iOS.cmake -DBLURRR_SDK_PATH=~/Source/Blurrr/Distribution/BINARIES/iOS/SDK/Lua_f32_i32 -GXcode ..
+mkdir -p BUILD/iOS
+cd BUILD/iOS
+cmake -DCMAKE_TOOLCHAIN_FILE=../../CMakeModules/iOS.toolchain.cmake -DBLURRR_SDK_PATH=~/Source/Blurrr/Release/Blurrr_Apple_DP1/Libraries/iOS/SDK/Lua_f32_i32 -C ../../CMakeModules/InitialCache_Lua_f32i32_iOS.cmake  -GXcode ../..
 
 remember to set the deployment target, -Os
 debug symbols?
 
 
-lipo -create -output libALmixerLuaBindings.a path/to/sim/libALmixerLuaBindings.a path/to/device/libALmixerLuaBindings.a
+[ewing@iMacALi3 ~/Source/Blurrr/CoreDependencies/luasocket/BUILD/iOS/src]$ lipo -output libcore.a -create RelWithDebInfo-iphoneos/libluasocket.a RelWithDebInfo-iphonesimulator/libluasocket.a 
+[ewing@iMacALi3 ~/Source/Blurrr/CoreDependencies/luasocket/BUILD/iOS/src]$ rsync -avz libcore.a ~/Source/Blurrr/Release/Blurrr_Apple_DP1/Libraries/iOS/SDK/Lua_f32_i32/lib/socket/libcore.a
+building file list ... done
+libcore.a
+
+sent 277743 bytes  received 42 bytes  555570.00 bytes/sec
+total size is 804336  speedup is 2.90
+[ewing@iMacALi3 ~/Source/Blurrr/CoreDependencies/luasocket/BUILD/iOS/src]$ cd 
+CMakeFiles/                     RelWithDebInfo-iphonesimulator/ mime/
+LuaSocket.build/                cmake_install.cmake             unix/
+RelWithDebInfo-iphoneos/        libcore.a                       
+[ewing@iMacALi3 ~/Source/Blurrr/CoreDependencies/luasocket/BUILD/iOS/src]$ cd mime/
+[ewing@iMacALi3 ~/Source/Blurrr/CoreDependencies/luasocket/BUILD/iOS/src/mime]$ ls
+CMakeFiles/                     RelWithDebInfo-iphoneos/        cmake_install.cmake
+LuaSocket.build/                RelWithDebInfo-iphonesimulator/
+[ewing@iMacALi3 ~/Source/Blurrr/CoreDependencies/luasocket/BUILD/iOS/src/mime]$ lipo -output libcore.a -create RelWithDebInfo-iphonesimulator/libluasocketmime.a RelWithDebInfo-iphoneos/libluasocketmime.a 
+[ewing@iMacALi3 ~/Source/Blurrr/CoreDependencies/luasocket/BUILD/iOS/src/mime]$ rsync -avz libcore.a ~/Source/Blurrr/Release/Blurrr_Apple_DP1/Libraries/iOS/SDK/Lua_f32_i32/lib/mime/libcore.a 
+building file list ... done
+libcore.a
+
+sent 38285 bytes  received 42 bytes  76654.00 bytes/sec
+total size is 105776  speedup is 2.76
+[ewing@iMacALi3 ~/Source/Blurrr/CoreDependencies/luasocket/BUILD/iOS/src/mime]$ cd ../unix/
+[ewing@iMacALi3 ~/Source/Blurrr/CoreDependencies/luasocket/BUILD/iOS/src/unix]$ lipo -output libcore.a -create RelWithDebInfo-iphonesimulator/libluasocketunix.a RelWithDebInfo-iphoneos/libluasocketunix.a 
+[ewing@iMacALi3 ~/Source/Blurrr/CoreDependencies/luasocket/BUILD/iOS/src/unix]$ rsync -avz libcore.a ~/Source/Blurrr/Release/Blurrr_Apple_DP1/Libraries/iOS/SDK/Lua_f32_i32/lib/unix/libcore.a 
+building file list ... done
+libcore.a
+
+sent 24406 bytes  received 42 bytes  48896.00 bytes/sec
+total size is 77464  speedup is 3.17
+
 

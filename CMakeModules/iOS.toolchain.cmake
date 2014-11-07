@@ -48,8 +48,8 @@ endif (CMAKE_UNAME)
 
 # Force the compilers to gcc for iOS
 include (CMakeForceCompiler)
-CMAKE_FORCE_C_COMPILER (gcc gcc)
-CMAKE_FORCE_CXX_COMPILER (g++ g++)
+CMAKE_FORCE_C_COMPILER (/usr/bin/clang clang)
+CMAKE_FORCE_CXX_COMPILER (/usr/bin/clang++ clang++)
 
 # Skip the platform compiler checks for cross compiling
 set (CMAKE_CXX_COMPILER_WORKS TRUE)
@@ -139,7 +139,9 @@ endif (NOT DEFINED CMAKE_IOS_SDK_ROOT)
 set (CMAKE_IOS_SDK_ROOT ${CMAKE_IOS_SDK_ROOT} CACHE PATH "Location of the selected iOS SDK")
 
 # Set the sysroot default to the most recent SDK
-set (CMAKE_OSX_SYSROOT ${CMAKE_IOS_SDK_ROOT} CACHE PATH "Sysroot used for iOS support")
+# The generic "iphoneos" is used to trigger the "Latest" setting. The full SDK path which CMake has been trying to do actually breaks functionality in subtle ways.
+set (CMAKE_OSX_SYSROOT iphoneos CACHE PATH "Sysroot used for iOS support")
+#set (CMAKE_OSX_SYSROOT ${CMAKE_IOS_SDK_ROOT} CACHE PATH "Sysroot used for iOS support")
 
 # set the architecture for iOS 
 # NOTE: Currently both ARCHS_STANDARD_32_BIT and ARCHS_UNIVERSAL_IPHONE_OS set armv7 only, so set both manually
