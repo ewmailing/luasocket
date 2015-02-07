@@ -26,11 +26,16 @@ IF(NOT WANTS_BUILD_STATIC_LIBRARY AND NOT WANTS_BUILD_MODULE_LIBRARY)
 	MESSAGE(SEND_ERROR "Either WANTS_BUILD_STATIC_LIBRARY or WANTS_BUILD_MODULE_LIBRARY needs to be selected, but both are OFF. So there is nothing to build.")
 ENDIF(NOT WANTS_BUILD_STATIC_LIBRARY AND NOT WANTS_BUILD_MODULE_LIBRARY)
 
+IF(LUA_INCLUDE_DIR AND EXISTS "${LUA_INCLUDE_DIR}/lua.h")
+	file(STRINGS "${LUA_INCLUDE_DIR}/lua.h" LUA_VERSION_MAJOR_LINE REGEX "^#define[ \t]+LUA_VERSION_MAJOR[ \t]+\"[0-9]+\"$")
+	file(STRINGS "${LUA_INCLUDE_DIR}/lua.h" LUA_VERSION_MINOR_LINE REGEX "^#define[ \t]+LUA_VERSION_MINOR[ \t]+\"[0-9]+\"$")
+	string(REGEX REPLACE "^#define[ \t]+LUA_VERSION_MAJOR[ \t]+\"([0-9]+)\"$" "\\1" LUA_VERSION_MAJOR "${LUA_VERSION_MAJOR_LINE}")
+	string(REGEX REPLACE "^#define[ \t]+LUA_VERSION_MINOR[ \t]+\"([0-9]+)\"$" "\\1" LUA_VERSION_MINOR "${LUA_VERSION_MINOR_LINE}")
 
+	SET(LUAPACKAGE_CDIR "lib/lua/${LUA_VERSION_MAJOR}.${LUA_VERSION_MINOR}" CACHE STRING "Path for Lua packaged platform specific things.")
+	SET(LUAPACKAGE_LDIR "share/lua/${LUA_VERSION_MAJOR}.${LUA_VERSION_MINOR}" CACHE STRING "Path for Lua packages platform independent things.")
+ENDIF()
 
-
-SET(LUAPACKAGE_CDIR "lib/lua/5.3" CACHE STRING "Path for Lua packaged platform specific things.")
-SET(LUAPACKAGE_LDIR "share/lua/5.3" CACHE STRING "Path for Lua packages platform independent things.")
 
 IF(APPLE)
 	SET(LUASOCKET_LINK_FLAGS "-undefined dynamic_lookup")
